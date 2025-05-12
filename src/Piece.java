@@ -1,5 +1,5 @@
 public class Piece {
-    public int row,column;
+    private int row,column;
     private char character;
     private Player plr;
     public Piece(int row, int column, char character, Player p){
