@@ -14,4 +14,12 @@ public class Piece {
 
     public Player getPlayer(){return plr;}
     public void setPlayer(Player p){plr=p;}
+
+    public int[] getPosition(){
+        return new int[]{row,column};
+    }
+    public void setPosition(int row, int column){
+        this.row=row;
+        this.column=column;
+    }
 }

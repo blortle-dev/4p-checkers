@@ -1,5 +1,6 @@
 public class Board {
-    private Piece[][] board = new Piece[12][12];
+    private Piece[][] board;
+    private Player p1,p2,p3,p4;
     /*
     *  Board has a 2x2 area in each corner cut out, to allow for player space
     *  Players start in the 2x8 areas in the middle of each edge
@@ -34,8 +35,20 @@ public class Board {
     *  Actual symbols and rendered board size will differ in final version
      */
 
-    public Board() {
+    private final String p1Char = "▲";
+    private final String p2Char = "●";
+    private final String p3Char = "■";
+    private final String p4Char = "◆";
 
+    //--BOARD LOGIC--
+
+    public Board() {
+        this(
+                new Player(),
+                new Player(),
+                new Player(),
+                new Player()
+        );
     }
 
     public Board(Player p1, Player p2, Player p3, Player p4) {
