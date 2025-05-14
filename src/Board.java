@@ -59,6 +59,14 @@ public class Board {
         board = new Piece[12][12];
     }
 
+    private pos(int row, int col) {
+        if (isInBounds(row, col)) {
+            return board[row][col];
+        } else {
+            return null;
+        }
+    }
+
     public void draw(){
         String out = "      A   B   C   D   E   F   G   H   I   J   K   L\n" +
                 "    |-----------------------------------------------|\n" +
