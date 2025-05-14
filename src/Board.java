@@ -8,7 +8,7 @@ public class Board {
     *  TODO: Implement checks to ensure no players can move into the cutouts
     *  TODO: rendering method
     *  TODO: Represent players with ASCII chars
-    *  DONE: Implement rotation method for renderer
+    *  DONE: Implement rotation method for renderer!
     *
     *       [A |B |C |D |E |F |G |H |I |J |K |L ]
     *  [1 ] [||||||..|..|..|..|..|..|..|..||||||] [1 ]
