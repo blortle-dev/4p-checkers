@@ -8,7 +8,7 @@ public class Board {
     *  TODO: Implement checks to ensure no players can move into the cutouts
     *  TODO: rendering method
     *  TODO: Represent players with ASCII chars
-    *  TODO: Implement rotation method for renderer
+    *  DONE: Implement rotation method for renderer
     *
     *       [A |B |C |D |E |F |G |H |I |J |K |L ]
     *  [1 ] [||||||..|..|..|..|..|..|..|..||||||] [1 ]
@@ -44,10 +44,10 @@ public class Board {
 
     public Board() {
         this(
-                new Player(),
-                new Player(),
-                new Player(),
-                new Player()
+                new Player("p1", "▲"),
+                new Player("p2", "●"),
+                new Player("p3", "■"),
+                new Player("p4","◆")
         );
     }
 
@@ -59,31 +59,56 @@ public class Board {
         board = new Piece[12][12];
     }
 
-    private pos(int row, int col) {
+    private String toConsole(int row, int col) {
         if (isInBounds(row, col)) {
-            return board[row][col];
-        } else {
-            return null;
+            int[] pos = board[row][col].getPosition();
         }
+        return " ";
     }
 
-    public void draw(){
-        String out = "      A   B   C   D   E   F   G   H   I   J   K   L\n" +
+    private String[] formatBoard(){
+        String[] arr = new String[board.length];
+        for(int i=0;i<board.length;i++){
+            for(int j=0;j<board[0].length;j++){
+                if(board[i][j]!=null){
+                    arr[i] = toConsole(i,j);
+                }else{
+                    arr[i] = " ";
+                }
+            }
+        }
+        return arr;
+    }
+
+    private Piece[][] rotateBoard(){
+        int n = board.length;
+        Piece[][] temp = new Piece[n][n];
+        for(int i=0;i<n;i++){
+            for(int j=0;j<board[0].length;j++){
+                temp[j][n-i-1] = board[i][j];
+            }
+        }
+        return temp;
+    }
+
+    public String draw(){
+        String out = " A   B   C   D   E   F   G   H   I   J   K   L\n" +
                 "    |-----------------------------------------------|\n" +
-                "  1 |---|---|   |   |   |   |   |   |   |   |---|---| 1\n" +
-                "  2 |---|---|   |   |   |   |   |   |   |   |---|---| 2\n" +
-                "  3 |   |   |   |   |   |   |   |   |   |   |   |   | 3\n" +
-                "  4 |   |   |   |   |   |   |   |   |   |   |   |   | 4\n" +
-                "  5 |   |   |   |   |   |   |   |   |   |   |   |   | 5\n" +
-                "  6 |   |   |   |   |   |   |   |   |   |   |   |   | 6\n" +
-                "  7 |   |   |   |   |   |   |   |   |   |   |   |   | 7\n" +
-                "  8 |   |   |   |   |   |   |   |   |   |   |   |   | 8\n" +
-                "  9 |   |   |   |   |   |   |   |   |   |   |   |   | 9\n" +
-                " 10 |   |   |   |   |   |   |   |   |   |   |   |   | 10\n" +
-                " 11 |---|---|   |   |   |   |   |   |   |   |---|---| 11\n" +
-                " 12 |---|---|   |   |   |   |   |   |   |   |---|---| 12\n" +
+                "  1 |---|---| %s | %s | %s | %s | %s | %s | %s | %s |---|---| 1\n" +
+                "  2 |---|---| %s | %s | %s | %s | %s | %s | %s | %s |---|---| 2\n" +
+                "  3 | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | 3\n" +
+                "  4 | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | 4\n" +
+                "  5 | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | 5\n" +
+                "  6 | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | 6\n" +
+                "  7 | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | 7\n" +
+                "  8 | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | 8\n" +
+                "  9 | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | 9\n" +
+                " 10 | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | 10\n" +
+                " 11 |---|---| %s | %s | %s | %s | %s | %s | %s | %s |---|---| 11\n" +
+                " 12 |---|---| %s | %s | %s | %s | %s | %s | %s | %s |---|---| 12\n" +
                 "    |-----------------------------------------------|\n" +
                 "      A   B   C   D   E   F   G   H   I   J   K   L";
+         return String.format(out,(Object[]) formatBoard());
     }
 
     //--PIECE LOGIC--
@@ -105,36 +130,14 @@ public class Board {
     public void jump(Piece p1, Piece p2) {
         int[] p1Pos = p1.getPosition();
         int[] p2Pos = p2.getPosition();
-        int[] skew = new int[]{
-                p2Pos[0] - p1Pos[0],
-                p2Pos[1] - p1Pos[1]
+        int[] p3Pos = new int[]{//just the change from p1 to p2
+                p1Pos[0]+2*(p2Pos[0] - p1Pos[0]),
+                p1Pos[1]+2*(p2Pos[1] - p1Pos[1])
         };
-        int[] temp = new int[]{p1Pos[0]+skew[0]*2,p1Pos[1]+skew[1]*2};
-        if(isInBounds(temp[0],temp[1])) {
-            board[temp[0]-skew[0]][temp[1]-skew[1]]=null;
+        if(isInBounds(p3Pos[0],p3Pos[1])&&!(p3Pos[0]==p1Pos[0]||p3Pos[1]==p1Pos[1])) {
+            board[p2Pos[0]][p2Pos[1]]=null;
             //TODO: add custom logic that checks the player who owns the piece and executes custom logic
-            p1.setPosition(temp[0],temp[1]);
+            p1.setPosition(p3Pos[0],p3Pos[1]);
         }
     }
-
-    /*
-
-      A   B   C   D   E   F   G   H   I   J   K   L
-    |-----------------------------------------------|
-  1 |---|---|   |   |   |   |   |   |   |   |---|---| 1
-  2 |---|---|   |   |   |   |   |   |   |   |---|---| 2
-  3 |   |   |   |   |   |   |   |   |   |   |   |   | 3
-  4 |   |   |   |   |   |   |   |   |   |   |   |   | 4
-  5 |   |   |   |   |   |   |   |   |   |   |   |   | 5
-  6 |   |   |   |   |   |   |   |   |   |   |   |   | 6
-  7 |   |   |   |   |   |   |   |   |   |   |   |   | 7
-  8 |   |   |   |   |   |   |   |   |   |   |   |   | 8
-  9 |   |   |   |   |   |   |   |   |   |   |   |   | 9
- 10 |   |   |   |   |   |   |   |   |   |   |   |   | 10
- 11 |---|---|   |   |   |   |   |   |   |   |---|---| 11
- 12 |---|---|   |   |   |   |   |   |   |   |---|---| 12
-    |-----------------------------------------------|
-      A   B   C   D   E   F   G   H   I   J   K   L
-
-     */
 }
