@@ -15,15 +15,12 @@ public class Piece {
     public int[] getPosition(){
         return new int[]{row,column};
     }
+    public void setPosition(int[] loc){this.row = loc[0];this.column=loc[1];}
 
     public boolean jump(Piece enemy, int[] endLocation){
         //TODO: custom logic goes here, boolean indicates if the piece jumped is removed or not
         row = endLocation[0];
         column = endLocation[1];
         return true;
-    }
-    public void move(int[] start, int[] end){
-        row = end[0];
-        column = end[1]; //TODO: add extra logic here
     }
 }
