@@ -1,16 +1,13 @@
 public class Piece {
     private int row,column;
-    private char character;
     private Player plr;
-    public Piece(int row, int column, char character, Player p){
+    public Piece(int row, int column, Player p){
         this.row=row;
         this.column=column;
-        this.character = character;
         plr = p;
     }
 
-    public char getCharacter(){return character;}
-    public void setCharacter(char character){this.character = character;}
+    public String getIcon(){return plr.getIcon();}
 
     public Player getPlayer(){return plr;}
     public void setPlayer(Player p){plr=p;}
@@ -18,8 +15,15 @@ public class Piece {
     public int[] getPosition(){
         return new int[]{row,column};
     }
-    public void setPosition(int row, int column){
-        this.row=row;
-        this.column=column;
+
+    public boolean jump(Piece enemy, int[] endLocation){
+        //TODO: custom logic goes here, boolean indicates if the piece jumped is removed or not
+        row = endLocation[0];
+        column = endLocation[1];
+        return true;
+    }
+    public void move(int[] start, int[] end){
+        row = end[0];
+        column = end[1]; //TODO: add extra logic here
     }
 }
