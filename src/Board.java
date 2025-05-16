@@ -97,18 +97,21 @@ public class Board {
 
     //--PIECE LOGIC--
 
-    private boolean isInBounds(int row, int col) {//TODO: add logic to check if the squares are on the diagonals
+    public boolean isInBounds(int row, int col) {//TODO: add logic to check if the squares are on the diagonals
         if(row>=0&&row<board.length&&col>=0&&col<board[0].length){
             return ((row >= 2 && row <= 9) || (col >= 2 && col <= 9));
         }
         return false;
     }
-    private boolean isDiagonal(int[] start,int[] end) {
+    public boolean isDiagonal(int[] start,int[] end) {
         return (start[0]!=end[0])&&(start[1]!=end[1]);
     }
     public void setLoc(int[] location, Piece piece) {
         board[piece.getPosition()[0]][piece.getPosition()[1]] = null;
         board[location[0]][location[1]] = piece;
+    }
+    public Piece getLoc(int row, int col){
+        return board[row][col];
     }
 
     public void jump(Piece p1, Piece p2) {
@@ -127,7 +130,7 @@ public class Board {
         int[] start = p.getPosition();
         if(isInBounds(end[0],end[1])) {
             p.setPosition(end);
-            setLoc(new int[]{start[0],start[1]},null);
+            setLoc(new int[]{start[0],start[1]},new Piece(start[0],start[1]));
             setLoc(end,p);
         }
     }

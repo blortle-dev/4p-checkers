@@ -21,7 +21,21 @@ public class Input {
             board.setLoc(new int[]{0,6},new Piece(0,6,board.getPlayers()[0]));
 
             for(int i=0;i<4;i++){
-                System.out.println(board.getPlayers()[i]+"'s Turn: ");
+                System.out.println(board.getPlayers()[i].getName()+"'s Turn: ");
+                System.out.print(board.draw()+"\nWhat would you like to move (? to ?): ");
+
+                String[] line = scanner.nextLine().toLowerCase().split(" ");
+                int[] start = new int[]{Integer.parseInt(line[0].charAt(1)+"")-1,line[0].charAt(0)-97};
+                int[] end = new int[]{Integer.parseInt(line[2].charAt(1)+"")-1,line[2].charAt(0)-97};
+                if(board.isInBounds(start[0],start[1])&&board.isDiagonal(start,end)){
+                    System.out.println("Valid Move");
+                    board.move(board.getLoc(start[0],start[1]),end);
+                }else{
+                    System.out.println("Invalid Move");
+                }
+
+                System.out.println();
+                //board.rotateBoard();
             }
 
             System.out.println("Would you like to play again?");

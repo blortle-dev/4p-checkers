@@ -6,6 +6,9 @@ public class Piece {
         this.column=column;
         plr = p;
     }
+    public Piece(int row, int column){
+        plr = new Player(""," ");
+    }
 
     public String getIcon(){return plr.getIcon();}
 
