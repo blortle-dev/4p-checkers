@@ -32,25 +32,9 @@ public class Board {
     }
 
     public void init(){
-        //testing logic
-        System.out.println("TESTER\n");
-        Piece p = new Piece(0,0,p1);
-        Piece p1 = new Piece(1,0,p2);
-        for(int i = 0;i<12;i++){
-            System.out.println(draw());
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            move(p,new int[]{p.getPosition()[0],i});
-            move(p1,new int[]{p1.getPosition()[0],i});
-
-        }
 
     }
 
-    //--ACCESSORS and MUTATORS--
     public Player[] getPlayers(){
         return new Player[]{p1,p2,p3,p4};
     }
@@ -79,7 +63,7 @@ public class Board {
         return arr;
     }
 
-    private Piece[][] rotateBoard(){
+    public Piece[][] rotateBoard(){
         int n = board.length;
         Piece[][] temp = new Piece[n][n];
         for(int i=0;i<n;i++){
@@ -87,6 +71,7 @@ public class Board {
                 temp[j][n-i-1] = board[i][j];
             }
         }
+        board = temp;
         return temp;
     }
 
@@ -121,10 +106,6 @@ public class Board {
     private boolean isDiagonal(int[] start,int[] end) {
         return (start[0]!=end[0])&&(start[1]!=end[1]);
     }
-
-    public Piece getPiece(int row, int col) {
-        return board[row][col];
-    }
     public void setLoc(int[] location, Piece piece) {
         board[piece.getPosition()[0]][piece.getPosition()[1]] = null;
         board[location[0]][location[1]] = piece;
@@ -146,8 +127,7 @@ public class Board {
         int[] start = p.getPosition();
         if(isInBounds(end[0],end[1])) {
             p.setPosition(end);
-            board[start[0]][start[1]] = null;
-            System.out.println(start[0]+" "+start[1]);
+            setLoc(new int[]{start[0],start[1]},null);
             setLoc(end,p);
         }
     }
