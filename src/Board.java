@@ -1,6 +1,9 @@
+import java.util.Arrays;
+
 public class Board {
     private Piece[][] board;
-    private Player p1,p2,p3,p4;
+    private Player[] players;
+    private int currentPlayer;
     /*
     *  Board has a 2x2 area in each corner cut out, to allow for player space
     *  Players start in the 2x8 areas in the middle of each edge
@@ -24,21 +27,13 @@ public class Board {
     }
 
     public Board(Player p1, Player p2, Player p3, Player p4) {
-        this.p1 = p1;
-        this.p2 = p2;
-        this.p3 = p3;
-        this.p4 = p4;
+        players = new Player[]{p1, p2, p3, p4};
         board = new Piece[12][12];
     }
 
     public void init(){
 
     }
-
-    public Player[] getPlayers(){
-        return new Player[]{p1,p2,p3,p4};
-    }
-
     //--BOARD LOGIC--
 
     private String formatCell(int row, int col) {
@@ -71,6 +66,10 @@ public class Board {
             Piece[][] temp = new Piece[n][n];
             for (int i = 0; i < n; i++) {
                 for (int j = 0; j < board[0].length; j++) {
+                    Piece p = getLoc(i,j);
+                    if(p!=null){
+                        p.setPosition(new int[]{j,n-i-1});
+                    }
                     temp[j][n - i - 1] = board[i][j];
                 }
             }
@@ -100,11 +99,24 @@ public class Board {
 
     //--ACCESSORS & MUTATORS
     public void setLoc(int[] location, Piece piece) {
-        board[piece.getPosition()[0]][piece.getPosition()[1]] = null;
         board[location[0]][location[1]] = piece;
     }
     public Piece getLoc(int row, int col){
         return board[row][col];
+    }
+
+    public Player[] getPlayers(){
+        return players;
+    }
+
+    public void setCurrentPlayer(int currentPlayer){
+        this.currentPlayer = currentPlayer;
+    }
+    public int getCurrentPlayer(){
+        return currentPlayer;
+    }
+    public Player getCurrentPlayerPlayer(){
+        return players[currentPlayer];
     }
 
     //--MOVE LOGIC--
@@ -121,14 +133,17 @@ public class Board {
 
     public boolean validMove(int[] start, int[] end, boolean isPromoted, boolean jump){
         boolean isJumping = Math.abs(end[0]-start[0])==2&&Math.abs(end[1]-start[1])==2;
-        if(isInBounds(end[0],end[1]) && isDiagonal(start,end)){
+        System.out.println("isJumping:"+isJumping);
+        if(isInBounds(end[0],end[1]) && isDiagonal(start,end) && getLoc(start[0],start[1]).getPlayer()==getCurrentPlayerPlayer()){
             if(start[0]-end[0] <= -1) {
+                System.out.println("going backwards");
                 if(isJumping){//if they are moving backwards by two, aka if they are attempting a jump
                     return isPromoted&&jump;
                 }else{
                     return isPromoted && (start[0] - end[0] == -1);
                 }
             }else{
+                System.out.println("going forwards");
                 if(isJumping){
                     return jump;
                 }else{
@@ -141,21 +156,28 @@ public class Board {
 
 
 
-    public void jump(Piece p1, Piece p2) {
-        int[] p1Pos = p1.getPosition();
-        int[] p2Pos = p2.getPosition();
-        int[] p3Pos = new int[]{//just the change from p1 to p2
-                p1Pos[0]+2*(p2Pos[0] - p1Pos[0]),
-                p1Pos[1]+2*(p2Pos[1] - p1Pos[1])
-        };
+    public boolean jump(Piece p, int[] end) {
+        if(p==null){return false;}
 
-        if(validMove(p1Pos,p3Pos,p1.getPromoted(),true)) {
+        System.out.println("jump");
+        int[] p1Pos = p.getPosition();
+        int[] p2Pos = new int[]{
+                (p1Pos[0]+end[0])/2,
+                (p1Pos[1]+end[1])/2,
+        };
+        System.out.println("p2Pos:"+ Arrays.toString(p2Pos));
+        if(validMove(p1Pos,end,p.getPromoted(),true)) {
             setLoc(p1Pos,null);
             setLoc(p2Pos,null);
-            setLoc(p3Pos,p1);
+            setLoc(end,p);
+            return true;
         }
+        return false;
     }
     public boolean move(Piece p, int[] end) {
+        if(p==null){return false;}
+
+        System.out.println("move");
         int[] start = p.getPosition();
         if(validMove(p.getPosition(),end,p.getPromoted(),false)) {
             p.setPosition(end);
