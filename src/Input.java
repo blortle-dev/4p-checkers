@@ -25,12 +25,11 @@ public class Input {
                 System.out.print(board.draw()+"\nWhat would you like to move (? to ?): ");
 
                 String[] line = scanner.nextLine().toLowerCase().split(" ");
+
                 int[] start = new int[]{Integer.parseInt(line[0].charAt(1)+"")-1,line[0].charAt(0)-97};
                 int[] end = new int[]{Integer.parseInt(line[2].charAt(1)+"")-1,line[2].charAt(0)-97};
-                if(board.isInBounds(start[0],start[1])&&board.isDiagonal(start,end)){
-                    System.out.println("Valid Move");
-                    board.move(board.getLoc(start[0],start[1]),end);
-                }else{
+
+                if(!board.move(board.getLoc(start[0],start[1]),end)){
                     System.out.println("Invalid Move");
                 }
 

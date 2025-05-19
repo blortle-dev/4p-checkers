@@ -1,10 +1,12 @@
 public class Piece {
     private int row,column;
     private Player plr;
+    private boolean promoted;
     public Piece(int row, int column, Player p){
         this.row=row;
         this.column=column;
         plr = p;
+        promoted = false;
     }
     public Piece(int row, int column){
         plr = new Player(""," ");
@@ -20,10 +22,6 @@ public class Piece {
     }
     public void setPosition(int[] loc){this.row = loc[0];this.column=loc[1];}
 
-    public boolean jump(Piece enemy, int[] endLocation){
-        //TODO: custom logic goes here, boolean indicates if the piece jumped is removed or not
-        row = endLocation[0];
-        column = endLocation[1];
-        return true;
-    }
+    public boolean getPromoted(){return promoted;}
+    public void setPromoted(boolean p){promoted = p;}
 }

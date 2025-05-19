@@ -4,10 +4,10 @@ public class Board {
     /*
     *  Board has a 2x2 area in each corner cut out, to allow for player space
     *  Players start in the 2x8 areas in the middle of each edge
-    *
-    *  TODO: Implement checks to ensure no players can move into the cutouts
-    *  TODO: rendering method
-    *  TODO: Represent players with ASCII chars
+    *  TODO: init() method initializes each player's pieces on the size
+    *  DONE: Implement checks to ensure no players can move into the cutouts
+    *  DONE: rendering method
+    *  DONE: Represent players with ASCII chars
     *  DONE: Implement rotation method for renderer!
     *  Actual symbols and rendered board size will differ in final version
      */
@@ -41,7 +41,7 @@ public class Board {
 
     //--BOARD LOGIC--
 
-    private String toConsole(int row, int col) {
+    private String formatCell(int row, int col) {
         if (isInBounds(row, col)) {
             return board[row][col].getIcon();
         }
@@ -54,7 +54,9 @@ public class Board {
         for(int i=0;i<board.length;i++){
             for(int j=0;j<board[0].length;j++){
                 if(board[i][j]!=null){
-                    arr[counter++] = toConsole(i,j);
+                    arr[counter++] = formatCell(i,j);
+                }else if(!isInBounds(i,j)){
+                    arr[counter++] = "---";
                 }else{
                     arr[counter++] = " ";
                 }
@@ -63,23 +65,24 @@ public class Board {
         return arr;
     }
 
-    public Piece[][] rotateBoard(){
-        int n = board.length;
-        Piece[][] temp = new Piece[n][n];
-        for(int i=0;i<n;i++){
-            for(int j=0;j<board[0].length;j++){
-                temp[j][n-i-1] = board[i][j];
+    public void rotateBoard(int times){
+        for(int x=0;x<times;x++) {
+            int n = board.length;
+            Piece[][] temp = new Piece[n][n];
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < board[0].length; j++) {
+                    temp[j][n - i - 1] = board[i][j];
+                }
             }
+            board = temp;
         }
-        board = temp;
-        return temp;
     }
 
     public String draw(){
         String out = "      A   B   C   D   E   F   G   H   I   J   K   L\n" +
                 "    |-----------------------------------------------|\n" +
-                "  1 | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | 1\n" +
-                "  2 | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | 2\n" +
+                "  1 |%s|%s| %s | %s | %s | %s | %s | %s | %s | %s |%s|%s| 1\n" +
+                "  2 |%s|%s| %s | %s | %s | %s | %s | %s | %s | %s |%s|%s| 2\n" +
                 "  3 | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | 3\n" +
                 "  4 | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | 4\n" +
                 "  5 | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | 5\n" +
@@ -88,24 +91,14 @@ public class Board {
                 "  8 | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | 8\n" +
                 "  9 | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | 9\n" +
                 " 10 | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | 10\n" +
-                " 11 | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | 11\n" +
-                " 12 | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | 12\n" +
+                " 11 |%s|%s| %s | %s | %s | %s | %s | %s | %s | %s |%s|%s| 11\n" +
+                " 12 |%s|%s| %s | %s | %s | %s | %s | %s | %s | %s |%s|%s| 12\n" +
                 "    |-----------------------------------------------|\n" +
                 "      A   B   C   D   E   F   G   H   I   J   K   L";
         return String.format(out, (Object[]) formatBoard());
     }
 
-    //--PIECE LOGIC--
-
-    public boolean isInBounds(int row, int col) {//TODO: add logic to check if the squares are on the diagonals
-        if(row>=0&&row<board.length&&col>=0&&col<board[0].length){
-            return ((row >= 2 && row <= 9) || (col >= 2 && col <= 9));
-        }
-        return false;
-    }
-    public boolean isDiagonal(int[] start,int[] end) {
-        return (start[0]!=end[0])&&(start[1]!=end[1]);
-    }
+    //--ACCESSORS & MUTATORS
     public void setLoc(int[] location, Piece piece) {
         board[piece.getPosition()[0]][piece.getPosition()[1]] = null;
         board[location[0]][location[1]] = piece;
@@ -114,6 +107,40 @@ public class Board {
         return board[row][col];
     }
 
+    //--MOVE LOGIC--
+    private boolean isInBounds(int row, int col) {
+        if(row>=0&&row<board.length&&col>=0&&col<board[0].length){
+            return ((row >= 2 && row <= 9) || (col >= 2 && col <= 9));
+        }
+        return false;
+    }
+
+    private boolean isDiagonal(int[] start,int[] end) {
+        return (start[0]!=end[0])&&(start[1]!=end[1]);
+    }
+
+    public boolean validMove(int[] start, int[] end, boolean isPromoted, boolean jump){
+        boolean isJumping = Math.abs(end[0]-start[0])==2&&Math.abs(end[1]-start[1])==2;
+        if(isInBounds(end[0],end[1]) && isDiagonal(start,end)){
+            if(start[0]-end[0] <= -1) {
+                if(isJumping){//if they are moving backwards by two, aka if they are attempting a jump
+                    return isPromoted&&jump;
+                }else{
+                    return isPromoted && (start[0] - end[0] == -1);
+                }
+            }else{
+                if(isJumping){
+                    return jump;
+                }else{
+                    return (start[0] - end[0] == 1);
+                }
+            }
+        }
+        return false;
+    }
+
+
+
     public void jump(Piece p1, Piece p2) {
         int[] p1Pos = p1.getPosition();
         int[] p2Pos = p2.getPosition();
@@ -121,17 +148,21 @@ public class Board {
                 p1Pos[0]+2*(p2Pos[0] - p1Pos[0]),
                 p1Pos[1]+2*(p2Pos[1] - p1Pos[1])
         };
-        if(isInBounds(p3Pos[0],p3Pos[1])&&isDiagonal(p1.getPosition(),p2.getPosition())) {
-            move(p1,p3Pos);
+
+        if(validMove(p1Pos,p3Pos,p1.getPromoted(),true)) {
+            setLoc(p1Pos,null);
             setLoc(p2Pos,null);
+            setLoc(p3Pos,p1);
         }
     }
-    public void move(Piece p, int[] end) {
+    public boolean move(Piece p, int[] end) {
         int[] start = p.getPosition();
-        if(isInBounds(end[0],end[1])) {
+        if(validMove(p.getPosition(),end,p.getPromoted(),false)) {
             p.setPosition(end);
-            setLoc(new int[]{start[0],start[1]},new Piece(start[0],start[1]));
+            setLoc(start,new Piece(start[0],start[1]));
             setLoc(end,p);
+            return true;
         }
+        return false;
     }
 }
