@@ -63,11 +63,16 @@ public class Board {
         for(int i=0;i<board.length;i++){
             for(int j=0;j<board[0].length;j++){
                 if(board[i][j]!=null){
-                    arr[counter++] = formatCell(i,j);
+                    if(board[i][j].getPromoted()){
+                        arr[counter] = "x";
+                    }else{
+                        arr[counter] = " ";
+                    }
+                    arr[counter++] += formatCell(i,j)+" ";
                 }else if(!isInBounds(i,j)){
                     arr[counter++] = "---";
                 }else{
-                    arr[counter++] = " ";
+                    arr[counter++] = "   ";
                 }
             }
         }
@@ -92,23 +97,22 @@ public class Board {
     }
 
     public String draw(){
-        String out = """
-                \u001B[37m      A   B   C   D   E   F   G   H   I   J   K   L
-                    |-----------------------------------------------|
-                  1 |%s|%s| %s | %s | %s | %s | %s | %s | %s | %s |%s|%s| 1
-                  2 |%s|%s| %s | %s | %s | %s | %s | %s | %s | %s |%s|%s| 2
-                  3 | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | 3
-                  4 | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | 4
-                  5 | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | 5
-                  6 | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | 6
-                  7 | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | 7
-                  8 | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | 8
-                  9 | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | 9
-                 10 | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | 10
-                 11 |%s|%s| %s | %s | %s | %s | %s | %s | %s | %s |%s|%s| 11
-                 12 |%s|%s| %s | %s | %s | %s | %s | %s | %s | %s |%s|%s| 12
-                    |-----------------------------------------------|
-                      A   B   C   D   E   F   G   H   I   J   K   L\u001B[0m""";
+        String out = "\u001B[37m      A   B   C   D   E   F   G   H   I   J   K   L\n" +
+                "    |-----------------------------------------------|\n" +
+                "  1 |%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s| 1\n" +
+                "  2 |%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s| 2\n" +
+                "  3 |%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s| 3\n" +
+                "  4 |%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s| 4\n" +
+                "  5 |%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s| 5\n" +
+                "  6 |%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s| 6\n" +
+                "  7 |%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s| 7\n" +
+                "  8 |%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s| 8\n" +
+                "  9 |%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s| 9\n" +
+                " 10 |%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s| 10\n" +
+                " 11 |%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s| 11\n" +
+                " 12 |%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s| 12\n" +
+                "    |-----------------------------------------------|\n" +
+                "      A   B   C   D   E   F   G   H   I   J   K   L\u001B[0m";
         return String.format(out, (Object[]) formatBoard());
     }
 
@@ -165,13 +169,16 @@ public class Board {
 
 
     public boolean jump(Piece p, int[] end) {
-        if(p==null){return false;}
+        if(p==null||getLoc(end[0],end[1])!=null){return false;}
 
         int[] p1Pos = p.getPosition();
         int[] p2Pos = new int[]{
                 (p1Pos[0]+end[0])/2,
                 (p1Pos[1]+end[1])/2,
         };
+
+        if(getLoc(p2Pos[0],p2Pos[1])==null||getLoc(p2Pos[0],p2Pos[1]).getPlayer()==players[currentPlayer]){return false;}
+
         if(validMove(p1Pos,end,p.getPromoted(),true)) {
             setLoc(p1Pos,null);
             setLoc(p2Pos,null);
@@ -181,7 +188,7 @@ public class Board {
         return false;
     }
     public boolean move(Piece p, int[] end) {
-        if(p==null){return false;}
+        if(p==null||getLoc(end[0],end[1])!=null){return false;}
 
         int[] start = p.getPosition();
         if(validMove(p.getPosition(),end,p.getPromoted(),false)) {
