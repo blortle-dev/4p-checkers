@@ -1,16 +1,18 @@
 public class Piece {
     private int row,column;
-    private char character;
     private Player plr;
-    public Piece(int row, int column, char character, Player p){
+    private boolean promoted;
+    public Piece(int row, int column, Player p){
         this.row=row;
         this.column=column;
-        this.character = character;
         plr = p;
+        promoted = false;
+    }
+    public Piece(int row, int column){
+        plr = new Player(""," ");
     }
 
-    public char getCharacter(){return character;}
-    public void setCharacter(char character){this.character = character;}
+    public String getIcon(){return plr.getIcon();}
 
     public Player getPlayer(){return plr;}
     public void setPlayer(Player p){plr=p;}
@@ -18,8 +20,8 @@ public class Piece {
     public int[] getPosition(){
         return new int[]{row,column};
     }
-    public void setPosition(int row, int column){
-        this.row=row;
-        this.column=column;
-    }
+    public void setPosition(int[] loc){this.row = loc[0];this.column=loc[1];}
+
+    public boolean getPromoted(){return promoted;}
+    public void setPromoted(boolean p){promoted = p;}
 }
