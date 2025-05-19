@@ -18,13 +18,13 @@ public class Input {
         while(running){
             //testing stuff
             startSeq();
-            board.setLoc(new int[]{0,6},new Piece(0,6,board.getPlayers()[0]));
+            //board.setLoc(new int[]{0,6},new Piece(0,6,board.getPlayers()[0]));
             board.setLoc(new int[]{1,7},new Piece(1,7,board.getPlayers()[1]));
             board.getLoc(0,6).setPromoted(true);
             for(int i=0;i<4;i++){
                 boolean validMove = false;
                 while(!validMove){
-                    System.out.println(board.getPlayers()[i].getName()+" ("+board.getPlayers()[i].getIcon()+")"+"'s Turn: ");
+                    System.out.println(board.getPlayers()[i].getName()+" ("+board.getPlayers()[i].getIcon()+"\u001B[0m)"+"'s Turn: ");
                     System.out.print(board.draw()+"\nWhat would you like to move (? to ?): ");
 
                     String[] line = scanner.nextLine().toLowerCase().split(" ");
@@ -58,7 +58,7 @@ public class Input {
         int counter = 0;
         for(Player p: players){
             counter++;
-            System.out.print("Player "+counter+"'s "+"("+p.getIcon()+") name: ");
+            System.out.print("Player "+counter+"'s "+"("+p.getIcon()+"\u001B[0m) name: ");
             p.setName(scanner.nextLine());
         }
 

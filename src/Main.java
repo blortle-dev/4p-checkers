@@ -1,7 +1,5 @@
 public class Main {
     public static void main(String[] args) {
-        Board b = new Board();
-        new Input(b);
-        b.init();
+        Input input = new Input(new Board());
     }
 }
