@@ -1,9 +1,7 @@
-import java.util.Arrays;
-
 public class Board {
     private Piece[][] board;
-    private Player[] players;
-    private int currentPlayer;
+    private final Player[] players;
+    private int currentPlayer = 0;
     /*
     *  Board has a 2x2 area in each corner cut out, to allow for player space
     *  Players start in the 2x8 areas in the middle of each edge
@@ -94,22 +92,23 @@ public class Board {
     }
 
     public String draw(){
-        String out = "\u001B[37m      A   B   C   D   E   F   G   H   I   J   K   L\n" +
-                "    |-----------------------------------------------|\n" +
-                "  1 |%s|%s| %s | %s | %s | %s | %s | %s | %s | %s |%s|%s| 1\n" +
-                "  2 |%s|%s| %s | %s | %s | %s | %s | %s | %s | %s |%s|%s| 2\n" +
-                "  3 | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | 3\n" +
-                "  4 | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | 4\n" +
-                "  5 | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | 5\n" +
-                "  6 | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | 6\n" +
-                "  7 | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | 7\n" +
-                "  8 | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | 8\n" +
-                "  9 | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | 9\n" +
-                " 10 | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | 10\n" +
-                " 11 |%s|%s| %s | %s | %s | %s | %s | %s | %s | %s |%s|%s| 11\n" +
-                " 12 |%s|%s| %s | %s | %s | %s | %s | %s | %s | %s |%s|%s| 12\n" +
-                "    |-----------------------------------------------|\n" +
-                "      A   B   C   D   E   F   G   H   I   J   K   L\u001B[0m";
+        String out = """
+                \u001B[37m      A   B   C   D   E   F   G   H   I   J   K   L
+                    |-----------------------------------------------|
+                  1 |%s|%s| %s | %s | %s | %s | %s | %s | %s | %s |%s|%s| 1
+                  2 |%s|%s| %s | %s | %s | %s | %s | %s | %s | %s |%s|%s| 2
+                  3 | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | 3
+                  4 | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | 4
+                  5 | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | 5
+                  6 | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | 6
+                  7 | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | 7
+                  8 | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | 8
+                  9 | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | 9
+                 10 | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | 10
+                 11 |%s|%s| %s | %s | %s | %s | %s | %s | %s | %s |%s|%s| 11
+                 12 |%s|%s| %s | %s | %s | %s | %s | %s | %s | %s |%s|%s| 12
+                    |-----------------------------------------------|
+                      A   B   C   D   E   F   G   H   I   J   K   L\u001B[0m""";
         return String.format(out, (Object[]) formatBoard());
     }
 
@@ -131,9 +130,6 @@ public class Board {
     public int getCurrentPlayer(){
         return currentPlayer;
     }
-    public Player getCurrentPlayerPlayer(){
-        return players[currentPlayer];
-    }
 
     //--MOVE LOGIC--
     private boolean isInBounds(int row, int col) {
@@ -144,28 +140,24 @@ public class Board {
     }
 
     private boolean isDiagonal(int[] start,int[] end) {
-        return (start[0]!=end[0])&&(start[1]!=end[1]);
+        return (start[0]!=start[1])&&(end[0]!=end[1]);
     }
 
     public boolean validMove(int[] start, int[] end, boolean isPromoted, boolean jump){
         boolean isJumping = Math.abs(end[0]-start[0])==2&&Math.abs(end[1]-start[1])==2;
-        System.out.println("isJumping:"+isJumping);
-        if(isInBounds(end[0],end[1]) && isDiagonal(start,end) && getLoc(start[0],start[1]).getPlayer()==getCurrentPlayerPlayer()){
-            if(start[0]-end[0] <= -1) {
-                System.out.println("going backwards");
-                if(isJumping){//if they are moving backwards by two, aka if they are attempting a jump
-                    return isPromoted&&jump;
-                }else{
-                    return isPromoted && (start[0] - end[0] == -1);
-                }
-            }else{
-                System.out.println("going forwards");
-                if(isJumping){
-                    return jump;
-                }else{
-                    return (start[0] - end[0] == 1);
-                }
-            }
+
+        if(!isInBounds(end[0],end[1]) || !isDiagonal(start,end) || getLoc(start[0],start[1]).getPlayer()!=players[currentPlayer]){
+            return false;
+        }
+
+        int rowDiff = end[0]-start[0];
+
+        if(rowDiff == 1 || (isJumping && rowDiff == 2)){
+            return rowDiff == 2 ? isPromoted && jump: isPromoted;
+        }
+
+        if(rowDiff == -1 || rowDiff == -2){
+            return rowDiff != -2 || jump;
         }
         return false;
     }
@@ -175,13 +167,11 @@ public class Board {
     public boolean jump(Piece p, int[] end) {
         if(p==null){return false;}
 
-        System.out.println("jump");
         int[] p1Pos = p.getPosition();
         int[] p2Pos = new int[]{
                 (p1Pos[0]+end[0])/2,
                 (p1Pos[1]+end[1])/2,
         };
-        System.out.println("p2Pos:"+ Arrays.toString(p2Pos));
         if(validMove(p1Pos,end,p.getPromoted(),true)) {
             setLoc(p1Pos,null);
             setLoc(p2Pos,null);
@@ -193,11 +183,10 @@ public class Board {
     public boolean move(Piece p, int[] end) {
         if(p==null){return false;}
 
-        System.out.println("move");
         int[] start = p.getPosition();
         if(validMove(p.getPosition(),end,p.getPromoted(),false)) {
             p.setPosition(end);
-            setLoc(start,new Piece(start[0],start[1]));
+            setLoc(start,null);
             setLoc(end,p);
             return true;
         }

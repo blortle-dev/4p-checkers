@@ -1,27 +1,38 @@
-import java.io.IOException;
 import java.util.Scanner;
 
 public class Input {
     private final Board board;
-    private final Player[] players;
     private final Scanner scanner;
     public Input(Board b) {
         this.board = b;
-        players = b.getPlayers();
         this.scanner = new Scanner(System.in);
         init();
     }
+
+    private void startSeq(){
+        System.out.println("WELCOME TO FOUR PLAYER CHECKERS");
+
+        board.init();
+        int counter = 0;
+        for(Player p: board.getPlayers()){
+            counter++;
+            System.out.print("Player "+counter+"'s "+"("+p.getIcon()+"\u001B[0m) name: ");
+            p.setName(scanner.nextLine());
+        }
+
+        System.out.println("Setting up the game board...");
+
+        //TODO: implement abilities
+    }
     public void init(){
         board.init();
+        startSeq();
 
         boolean running = true, win = false;
         while(running){
-            //testing stuff
-            startSeq();
-            //board.setLoc(new int[]{0,6},new Piece(0,6,board.getPlayers()[0]));
-            board.setLoc(new int[]{1,7},new Piece(1,7,board.getPlayers()[1]));
-            board.getLoc(0,6).setPromoted(true);
             for(int i=0;i<4;i++){
+                board.setCurrentPlayer(i);
+
                 boolean validMove = false;
                 while(!validMove){
                     System.out.println(board.getPlayers()[i].getName()+" ("+board.getPlayers()[i].getIcon()+"\u001B[0m)"+"'s Turn: ");
@@ -29,8 +40,8 @@ public class Input {
 
                     String[] line = scanner.nextLine().toLowerCase().split(" ");
 
-                    int[] start = new int[]{Integer.parseInt(line[0].charAt(1)+"")-1,line[0].charAt(0)-97};
-                    int[] end = new int[]{Integer.parseInt(line[2].charAt(1)+"")-1,line[2].charAt(0)-97};
+                    int[] start = new int[]{Integer.parseInt(line[0].substring(1))-1,line[0].charAt(0)-97};
+                    int[] end = new int[]{Integer.parseInt(line[2].substring(1))-1,line[2].charAt(0)-97};
 
                     if(board.jump(board.getLoc(start[0],start[1]),end) || board.move(board.getLoc(start[0],start[1]),end)){
                         validMove = true;
@@ -42,7 +53,6 @@ public class Input {
 
                 System.out.println();
                 board.rotateBoard(1);
-                board.setCurrentPlayer(i);
             }
 
             System.out.println("Would you like to play again?");
@@ -51,19 +61,5 @@ public class Input {
             }
         }
     }
-    private void startSeq(){
-        System.out.println("WELCOME TO FOUR PLAYER CHECKERS");
 
-        board.init();
-        int counter = 0;
-        for(Player p: players){
-            counter++;
-            System.out.print("Player "+counter+"'s "+"("+p.getIcon()+"\u001B[0m) name: ");
-            p.setName(scanner.nextLine());
-        }
-
-        System.out.println("Setting up the game board...");
-
-        //TODO: implement abilities
-    }
 }
