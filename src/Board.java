@@ -37,6 +37,7 @@ public class Board {
 
         for(int i=0;i<p1Positions.length;i++){
             board[p1Positions[i][0]][p1Positions[i][1]] = new Piece(p1Positions[i][0],p1Positions[i][1], players[0]);
+            board[p1Positions[i][0]][p1Positions[i][1]].setPromoted(true);
         }
         for(int i=0;i<p2Positions.length;i++){
             board[p2Positions[i][0]][p2Positions[i][1]] = new Piece(p2Positions[i][0],p2Positions[i][1], players[1]);
