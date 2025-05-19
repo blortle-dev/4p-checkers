@@ -20,7 +20,10 @@ public class Piece {
     public int[] getPosition(){
         return new int[]{row,column};
     }
-    public void setPosition(int[] loc){this.row = loc[0];this.column=loc[1];}
+    public void setPosition(int[] loc){
+        this.row = loc[0];this.column=loc[1];
+        if(loc[0]==0){promoted=true;}
+    }
 
     public boolean getPromoted(){return promoted;}
     public void setPromoted(boolean p){promoted = p;}

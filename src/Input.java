@@ -28,8 +28,8 @@ public class Input {
         board.init();
         startSeq();
 
-        boolean running = true, win = false;
-        while(running){
+        boolean win = false;
+        while(!win){
             for(int i=0;i<4;i++){
                 board.setCurrentPlayer(i);
 
@@ -54,10 +54,16 @@ public class Input {
                 System.out.println();
                 board.rotateBoard(1);
             }
+        }
 
-            System.out.println("Would you like to play again?");
-            if(scanner.nextLine().toLowerCase().charAt(0) == 'n'){
-                running = false;
+        System.out.print("Would you like to play again? ");
+        boolean temp = true;
+        while(temp){
+            if(scanner.nextLine().toLowerCase().charAt(0) == 'y'){
+                temp = false;
+                init();
+            }else if(scanner.nextLine().toLowerCase().charAt(0) == 'n'){
+                temp = false;
             }
         }
     }
