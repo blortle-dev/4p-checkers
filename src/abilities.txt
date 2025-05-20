@@ -1,0 +1,6 @@
+@ This file lists the available abilities in 4p-checkers.
+@ Lines are commented out with an @ at the start.
+@ A template ability is listed below:
+@ Ability Name !! Brief Description !! Java Class Name
+Test !! Test ability that take over the pieces that are jumped !! Ability1
+Fortress !! Pieces that have been stationary outside their starting area for 5 turns can  !! Fortress
