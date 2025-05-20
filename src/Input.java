@@ -82,15 +82,15 @@ public class Input {
             }
         }
 
-        System.out.print("Would you like to play again? ");
-        boolean temp = true;
-        while(temp){
+        boolean temp = true; while(temp){
+            System.out.print("Would you like to play again? ");
             if(scanner.nextLine().toLowerCase().charAt(0) == 'y'){
                 temp = false;
                 init();
             }else if(scanner.nextLine().toLowerCase().charAt(0) == 'n'){
                 temp = false;
             }
+            System.out.println();
         }
     }
 
