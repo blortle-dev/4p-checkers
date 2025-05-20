@@ -1,5 +1,6 @@
 public class Player {
     private String icon,name;
+    private Ability ability;
     public Player( String name, String icon) {
         this.icon = icon;
         this.name = name;

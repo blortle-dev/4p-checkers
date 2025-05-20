@@ -1,12 +1,28 @@
+import java.io.File;
 import java.util.Scanner;
 
 public class Input {
     private final Board board;
     private final Scanner scanner;
+    private final String abilities;
     public Input(Board b) {
         this.board = b;
         this.scanner = new Scanner(System.in);
-        init();
+
+        abilities = "";
+        try{
+            File abilitiesFile = new File("abilities.txt"); //yo what the fuck why doesn tthis work
+            Scanner reader = new Scanner(abilitiesFile);
+            while(reader.hasNextLine()){
+                String data = reader.nextLine();
+                abilities.concat(data);
+            }
+            init();
+        }catch(Exception e){
+            System.out.println("Error: "+e);
+        }
+
+
     }
 
     private void startSeq(){
@@ -16,13 +32,23 @@ public class Input {
         int counter = 0;
         for(Player p: board.getPlayers()){
             counter++;
+
             System.out.print("Player "+counter+"'s "+"("+p.getIcon()+"\u001B[0m) name: ");
             p.setName(scanner.nextLine());
+
+            System.out.println(p.getName()+"'s ability is (type \"list\" for a list):");
+            String nextLn = scanner.nextLine();
+            if(nextLn.equals("list")){
+                System.out.println();
+                String[] lines = abilities.split(";");
+                for(int i = 0;i<lines.length;i++){
+                    String[] cells = lines[i].split("!!");
+                    System.out.print(cells[0].trim()+": "+cells[1].trim());
+                }
+            }
         }
 
         System.out.println("Setting up the game board...");
-
-        //TODO: implement abilities
     }
     public void init(){
         board.init();
