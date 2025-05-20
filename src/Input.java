@@ -19,7 +19,7 @@ public class Input {
             }
             init();
         }catch(Exception e){
-            System.out.println("Error: "+e);
+            System.out.println("HEY ALEX!\nI've got no clue in the world what this code does.\nIt's throwing an exception because abilities.txt is in the src/ directory.\nAnyhoo, you don't need to make a manual method to read the abilities file.\nUse AbilityHandler.getAbilities() to get an ArrayList<String[]> of the abilities.\nEach String[] has index 0 as the name, 1 as the description, and 2 as the class name.\nBYE ALEX!\uD83D\uDE18");
         }
 
 

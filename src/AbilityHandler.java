@@ -1,3 +1,8 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+import java.util.ArrayList;
+
 public class AbilityHandler {
 
     // wait u wanted to do it so thatone ability no each player gets to pick an ability
@@ -18,6 +23,28 @@ public class AbilityHandler {
         }
     }
 
+    public ArrayList<String[]> getAbilities() {
+        Scanner sc = null;
+        try {
+            sc = new Scanner(new File("src/abilities.txt"));
+        } catch (FileNotFoundException _) {
+            // hi! :D
+        }
+
+        ArrayList<String[]> out = new ArrayList<>();
+
+        int len = 0;
+        while(sc.hasNextLine()){
+            String line = sc.nextLine();
+            if(line.isEmpty() || line.charAt(0) == '@') continue;
+            String[] split = line.split(" !! ");
+            out.add(split);
+            len++;
+        }
+
+        return out;
+    }
+
 
 }
 
@@ -30,5 +57,6 @@ public class AbilityHandler {
 //oi
 // check google slides
 // shared with me k Object clazz = Class.forName(name);
-//        Ability ability = (Ability) clazz; 🔥 bro sophomore year looks so light fr
-// and we have baguettes
+//        Ability ability = (Ability) clazz; 🔥 bro sophomore year looks so light
+//        fr
+//        and we have baguettes
