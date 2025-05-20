@@ -6,4 +6,4 @@
 @ PLEASE READ: WHEN CREATING ABILITIES MAKE THE CLASS HAVE AN "A" BEFORE IT BUT PROVIDE THE NAME OF THE CLASS WITHOUT AN A HERE
 @
 Default !! The player has no abilities. !! Default
-Fortress !! Pieces that have been stationary outside their starting area for 5 turns can  !! Fortress
+Fortress !! Pieces that have been stationary outside their starting area for 5 turns have an extra life after being jumped. !! Fortress
