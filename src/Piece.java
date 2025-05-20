@@ -8,9 +8,6 @@ public class Piece {
         plr = p;
         promoted = false;
     }
-    public Piece(int row, int column){
-        plr = new Player(""," ");
-    }
 
     public String getIcon(){return plr.getIcon();}
 

@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class Board {
     private Piece[][] board;
     private final Player[] players;
@@ -12,6 +14,8 @@ public class Board {
     *  DONE: Implement rotation method for renderer!
     *  Actual symbols and rendered board size will differ in final version
      */
+
+    //TODO: add abilities
 
     //--INITIALIZERS & CONSTRUCTORS--
 
@@ -37,7 +41,6 @@ public class Board {
 
         for(int i=0;i<p1Positions.length;i++){
             board[p1Positions[i][0]][p1Positions[i][1]] = new Piece(p1Positions[i][0],p1Positions[i][1], players[0]);
-            board[p1Positions[i][0]][p1Positions[i][1]].setPromoted(true);
         }
         for(int i=0;i<p2Positions.length;i++){
             board[p2Positions[i][0]][p2Positions[i][1]] = new Piece(p2Positions[i][0],p2Positions[i][1], players[1]);
@@ -64,9 +67,7 @@ public class Board {
         for(int i=0;i<board.length;i++){
             for(int j=0;j<board[0].length;j++){
                 if(board[i][j]!=null){
-                    if(board[i][j].getPromoted()){
-                        arr[counter] = "x";
-                    }else{
+                    {
                         arr[counter] = " ";
                     }
                     arr[counter++] += formatCell(i,j)+" ";
@@ -98,22 +99,23 @@ public class Board {
     }
 
     public String draw(){
-        String out = "\u001B[37m      A   B   C   D   E   F   G   H   I   J   K   L\n" +
-                "    |-----------------------------------------------|\n" +
-                "  1 |%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s| 1\n" +
-                "  2 |%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s| 2\n" +
-                "  3 |%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s| 3\n" +
-                "  4 |%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s| 4\n" +
-                "  5 |%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s| 5\n" +
-                "  6 |%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s| 6\n" +
-                "  7 |%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s| 7\n" +
-                "  8 |%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s| 8\n" +
-                "  9 |%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s| 9\n" +
-                " 10 |%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s| 10\n" +
-                " 11 |%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s| 11\n" +
-                " 12 |%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s| 12\n" +
-                "    |-----------------------------------------------|\n" +
-                "      A   B   C   D   E   F   G   H   I   J   K   L\u001B[0m";
+        String out = """
+                \u001B[37m      A   B   C   D   E   F   G   H   I   J   K   L
+                    |-----------------------------------------------|
+                  1 |%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s| 1
+                  2 |%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s| 2
+                  3 |%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s| 3
+                  4 |%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s| 4
+                  5 |%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s| 5
+                  6 |%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s| 6
+                  7 |%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s| 7
+                  8 |%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s| 8
+                  9 |%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s| 9
+                 10 |%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s| 10
+                 11 |%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s| 11
+                 12 |%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s| 12
+                    |-----------------------------------------------|
+                      A   B   C   D   E   F   G   H   I   J   K   L\u001B[0m""";
         return String.format(out, (Object[]) formatBoard());
     }
 
@@ -145,12 +147,11 @@ public class Board {
     }
 
     private boolean isDiagonal(int[] start,int[] end) {
-        return (start[0]!=start[1])&&(end[0]!=end[1]);
+        return (start[0]!=end[0])&&(start[1]!=end[1]);
     }
 
     public boolean validMove(int[] start, int[] end, boolean isPromoted, boolean jump){
         boolean isJumping = Math.abs(end[0]-start[0])==2&&Math.abs(end[1]-start[1])==2;
-
         if(!isInBounds(end[0],end[1]) || !isDiagonal(start,end) || getLoc(start[0],start[1]).getPlayer()!=players[currentPlayer]){
             return false;
         }
@@ -182,7 +183,7 @@ public class Board {
 
         if(validMove(p1Pos,end,p.getPromoted(),true)) {
             setLoc(p1Pos,null);
-            setLoc(p2Pos,null);
+            setLoc(p2Pos,null); //custom logic could be added here
             setLoc(end,p);
             return true;
         }
