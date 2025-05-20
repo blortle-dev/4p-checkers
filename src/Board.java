@@ -15,16 +15,14 @@ public class Board {
     *  Actual symbols and rendered board size will differ in final version
      */
 
-    //TODO: add abilities
-
     //--INITIALIZERS & CONSTRUCTORS--
 
     public Board() {
         this(
-                new Player("p1", "\u001B[34m▲\u001B[37m"),
-                new Player("p2", "\u001B[32m●\u001B[37m"),
-                new Player("p3", "\u001B[33m■\u001B[37m"),
-                new Player("p4","\u001B[31m◆\u001B[37m")
+                new Player("p1", "\u001B[34m▲\u001B[37m","Default"),
+                new Player("p2", "\u001B[32m●\u001B[37m","Default"),
+                new Player("p3", "\u001B[33m■\u001B[37m","Default"),
+                new Player("p4","\u001B[31m◆\u001B[37m","Default")
         );
     }
 
@@ -39,17 +37,17 @@ public class Board {
         int[][] p3Positions = {{0,2},{0,4},{0,6},{0,8},{1,3},{1,5},{1,7},{1,9}};
         int[][] p4Positions = {{2,0},{4,0},{6,0},{8,0},{3,1},{5,1},{7,1},{9,1}};
 
-        for(int i=0;i<p1Positions.length;i++){
-            board[p1Positions[i][0]][p1Positions[i][1]] = new Piece(p1Positions[i][0],p1Positions[i][1], players[0]);
+        for (int[] p1Position : p1Positions) {
+            board[p1Position[0]][p1Position[1]] = new Piece(p1Position[0], p1Position[1], players[0]);
         }
-        for(int i=0;i<p2Positions.length;i++){
-            board[p2Positions[i][0]][p2Positions[i][1]] = new Piece(p2Positions[i][0],p2Positions[i][1], players[1]);
+        for (int[] p2Position : p2Positions) {
+            board[p2Position[0]][p2Position[1]] = new Piece(p2Position[0], p2Position[1], players[1]);
         }
-        for(int i=0;i<p3Positions.length;i++){
-            board[p3Positions[i][0]][p3Positions[i][1]] = new Piece(p3Positions[i][0],p3Positions[i][1], players[2]);
+        for (int[] p3Position : p3Positions) {
+            board[p3Position[0]][p3Position[1]] = new Piece(p3Position[0], p3Position[1], players[2]);
         }
-        for(int i=0;i<p4Positions.length;i++){
-            board[p4Positions[i][0]][p4Positions[i][1]] = new Piece(p4Positions[i][0],p4Positions[i][1], players[3]);
+        for (int[] p4Position : p4Positions) {
+            board[p4Position[0]][p4Position[1]] = new Piece(p4Position[0], p4Position[1], players[3]);
         }
     }
     //--BOARD LOGIC--
@@ -89,7 +87,7 @@ public class Board {
                 for (int j = 0; j < board[0].length; j++) {
                     Piece p = getLoc(i,j);
                     if(p!=null){
-                        p.setPosition(new int[]{j,n-i-1});
+                        p.setPosition(new int[]{j,n-i-1}); //TODO: refactor
                     }
                     temp[j][n - i - 1] = board[i][j];
                 }
@@ -122,6 +120,8 @@ public class Board {
     //--ACCESSORS & MUTATORS
     public void setLoc(int[] location, Piece piece) {
         board[location[0]][location[1]] = piece;
+        if(piece!=null)
+            piece.setPosition(new int[]{location[0],location[1]});
     }
     public Piece getLoc(int row, int col){
         return board[row][col];
@@ -173,18 +173,16 @@ public class Board {
     public boolean jump(Piece p, int[] end) {
         if(p==null||getLoc(end[0],end[1])!=null){return false;}
 
-        int[] p1Pos = p.getPosition();
+        int[] start = p.getPosition();
         int[] p2Pos = new int[]{
-                (p1Pos[0]+end[0])/2,
-                (p1Pos[1]+end[1])/2,
+                (start[0]+end[0])/2,
+                (start[1]+end[1])/2,
         };
 
         if(getLoc(p2Pos[0],p2Pos[1])==null||getLoc(p2Pos[0],p2Pos[1]).getPlayer()==players[currentPlayer]){return false;}
 
-        if(validMove(p1Pos,end,p.getPromoted(),true)) {
-            setLoc(p1Pos,null);
-            setLoc(p2Pos,null); //custom logic could be added here
-            setLoc(end,p);
+        if(validMove(start,end,p.getPromoted(),true)) {
+            p.getPlayer().getAbility().jump(this,p,getLoc(p2Pos[0],p2Pos[1]),end);
             return true;
         }
         return false;
@@ -192,11 +190,8 @@ public class Board {
     public boolean move(Piece p, int[] end) {
         if(p==null||getLoc(end[0],end[1])!=null){return false;}
 
-        int[] start = p.getPosition();
         if(validMove(p.getPosition(),end,p.getPromoted(),false)) {
-            p.setPosition(end);
-            setLoc(start,null);
-            setLoc(end,p);
+            p.getPlayer().getAbility().move(this,p,end);
             return true;
         }
         return false;

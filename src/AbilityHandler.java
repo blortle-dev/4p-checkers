@@ -14,7 +14,7 @@ public class AbilityHandler {
     // and each other one can extend Ability
     public static Ability getAbility(String name){
         try{
-            Class<?> clazz = Class.forName(name);
+            Class<?> clazz = Class.forName("A"+name);
             Object instance = clazz.getDeclaredConstructor().newInstance();
 
             return instance instanceof Ability ? (Ability) instance: null;
@@ -23,18 +23,18 @@ public class AbilityHandler {
         }
     }
 
-    public ArrayList<String[]> getAbilities() {
+    public static String[][] getAbilities() {
         Scanner sc = null;
         try {
             sc = new Scanner(new File("src/abilities.txt"));
-        } catch (FileNotFoundException _) {
-            // hi! :D
+        } catch (FileNotFoundException e) {
+            System.out.println("Abilities file not found.");
         }
 
         ArrayList<String[]> out = new ArrayList<>();
 
         int len = 0;
-        while(sc.hasNextLine()){
+        while(sc!=null&&sc.hasNextLine()){
             String line = sc.nextLine();
             if(line.isEmpty() || line.charAt(0) == '@') continue;
             String[] split = line.split(" !! ");
@@ -42,21 +42,8 @@ public class AbilityHandler {
             len++;
         }
 
-        return out;
+        return out.toArray(new String[0][]);
     }
 
 
 }
-
-// oh phew 😘
-// brb pooks
-//bro what is platypi 😭
-// note - platypi font
-// back to plearth
-
-//oi
-// check google slides
-// shared with me k Object clazz = Class.forName(name);
-//        Ability ability = (Ability) clazz; 🔥 bro sophomore year looks so light
-//        fr
-//        and we have baguettes

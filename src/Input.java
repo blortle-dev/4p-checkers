@@ -4,25 +4,13 @@ import java.util.Scanner;
 public class Input {
     private final Board board;
     private final Scanner scanner;
-    private final String abilities;
+    private final String[][] abilitiesCells;
     public Input(Board b) {
         this.board = b;
         this.scanner = new Scanner(System.in);
+        abilitiesCells = AbilityHandler.getAbilities();
 
-        abilities = "";
-        try{
-            File abilitiesFile = new File("abilities.txt"); //yo what the fuck why doesn tthis work
-            Scanner reader = new Scanner(abilitiesFile);
-            while(reader.hasNextLine()){
-                String data = reader.nextLine();
-                abilities.concat(data);
-            }
-            init();
-        }catch(Exception e){
-            System.out.println("HEY ALEX!\nI've got no clue in the world what this code does.\nIt's throwing an exception because abilities.txt is in the src/ directory.\nAnyhoo, you don't need to make a manual method to read the abilities file.\nUse AbilityHandler.getAbilities() to get an ArrayList<String[]> of the abilities.\nEach String[] has index 0 as the name, 1 as the description, and 2 as the class name.\nBYE ALEX!\uD83D\uDE18");
-        }
-
-
+        init();
     }
 
     private void startSeq(){
@@ -35,16 +23,21 @@ public class Input {
 
             System.out.print("Player "+counter+"'s "+"("+p.getIcon()+"\u001B[0m) name: ");
             p.setName(scanner.nextLine());
+            boolean brk = false;while(!brk) {
+                System.out.print(p.getName() + "'s ability is (type \"list\" for a list): ");
 
-            System.out.println(p.getName()+"'s ability is (type \"list\" for a list):");
-            String nextLn = scanner.nextLine();
-            if(nextLn.equals("list")){
-                System.out.println();
-                String[] lines = abilities.split(";");
-                for(int i = 0;i<lines.length;i++){
-                    String[] cells = lines[i].split("!!");
-                    System.out.print(cells[0].trim()+": "+cells[1].trim());
+                String nextLn = scanner.nextLine();
+                if (nextLn.equals("list")) {
+                    for (String[] line : abilitiesCells) {
+                        System.out.println(line[0] + " - " + line[1] + " - " + line[2]);
+                    }
+                }else if(AbilityHandler.getAbility(nextLn)!=null){
+                    p.setAbility(AbilityHandler.getAbility(nextLn));
+                    brk = true;
+                }else{
+                    System.out.println("Invalid ability, try again.");
                 }
+                System.out.println();
             }
         }
 
