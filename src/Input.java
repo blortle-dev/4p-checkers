@@ -4,6 +4,7 @@ public class Input {
     private final Board board;
     private final Scanner scanner;
     private final String[][] abilitiesCells;
+
     public Input(Board b) {
         this.board = b;
         this.scanner = new Scanner(System.in);
@@ -58,6 +59,12 @@ public class Input {
                     System.out.print(board.draw()+"\nWhat would you like to move (? to ?): ");
 
                     String[] line = scanner.nextLine().toLowerCase().split(" ");
+
+                    String exitCode = "exit";
+                    if (line[0].equals(exitCode)) {
+                        System.out.println("Exiting...");
+                        System.exit(0);
+                    }
 
                     if(!board.getPlayers()[board.getCurrentPlayer()].isSkipped()) {
                         int[] start = new int[]{Integer.parseInt(line[0].substring(1))-1,line[0].charAt(0)-97};
