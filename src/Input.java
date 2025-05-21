@@ -26,7 +26,8 @@ public class Input {
                 System.out.print(p.getName() + "'s ability is (type \"list\" for a list): ");
 
                 String nextLn = scanner.nextLine();
-                if (nextLn.equals("list")) {
+                nextLn = nextLn.substring(0,1).toUpperCase() + nextLn.substring(1);
+                if (nextLn.equals("List")) {
                     for (String[] line : abilitiesCells) {
                         System.out.println(line[0] + " - " + line[1]);
                     }
