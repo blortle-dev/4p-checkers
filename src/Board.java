@@ -125,7 +125,7 @@ public class Board {
         ArrayList<Player> playersDetected = new ArrayList<>();
         for (Piece[] pieces : board) {
             for (int j = 0; j < board[0].length; j++) {
-                if (pieces[j] != null && !playersDetected.contains(pieces[j].getPlayer())) {
+                if (pieces[j] != null && !playersDetected.contains(pieces[j].getPlayer()) && !pieces[j].getPlayer().isSkipped()) {
                     playersDetected.add(pieces[j].getPlayer());
                 }
             }
@@ -165,7 +165,7 @@ public class Board {
     }
 
     private boolean isDiagonal(int[] start,int[] end) {
-        return (start[0]!=end[0])&&(start[1]!=end[1]);
+        return (start[0]!=end[0])&&(start[1]!=end[1])&&Math.abs(start[0]-end[0])==Math.abs(start[1]-end[1]);
     }
 
     public boolean validMove(int[] start, int[] end, boolean isPromoted, boolean jump){
@@ -199,6 +199,9 @@ public class Board {
 
         if(validMove(start,end,p.getPromoted(),true)) {
             p.getPlayer().getAbility().jump(this,p,getLoc(p2Pos[0],p2Pos[1]),end);
+            if(end[0]==0){
+                p.getPlayer().getAbility().promote(this,p);
+            }
             return true;
         }
         return false;
