@@ -11,7 +11,7 @@ public class Player {
     public String getIcon() {return icon;}
     public String getName() {return name;}
 
-    public void setIcon(String icon) {this.icon = icon;}
+    //public void setIcon(String icon) {this.icon = icon;}
     public void setName(String name) {
         this.name = name;
         skip = name.equals("skip");
@@ -21,5 +21,5 @@ public class Player {
     public Ability getAbility() {return ability;}
 
     public boolean isSkipped() {return skip;}
-    public void setSkip(boolean skip) {this.skip = skip;}
+    //public void setSkip(boolean skip) {this.skip = skip;}
 }
