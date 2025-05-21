@@ -1,10 +1,12 @@
 public class Player {
     private String icon,name;
     private Ability ability;
+    private boolean skip;
     public Player(String name, String icon, String ability) {
         this.icon = icon;
         this.name = name;
         this.ability = AbilityHandler.getAbility(ability);
+        skip = false;
     }
     public String getIcon() {return icon;}
     public String getName() {return name;}
@@ -14,4 +16,7 @@ public class Player {
 
     public void setAbility(Ability ability) {this.ability = ability;}
     public Ability getAbility() {return ability;}
+
+    public boolean isSkipped() {return skip;}
+    public void setSkip(boolean skip) {this.skip = skip;}
 }

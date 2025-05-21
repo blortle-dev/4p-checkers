@@ -1,5 +1,5 @@
 public interface Ability {
-    default void init(Board b, Piece p){}
+    //default void init(Board b, Piece p){}
     default void move(Board b, Piece p, int[] end){
         b.setLoc(p.getPosition(),null);
         b.setLoc(end,p);
@@ -12,4 +12,5 @@ public interface Ability {
     default void promote(Board b, Piece p){
         p.setPromoted(true);
     }
+    default void tick(Board b, Piece p){}
 }

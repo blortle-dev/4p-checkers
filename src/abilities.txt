@@ -3,7 +3,7 @@
 @ A template ability is listed below:
 @ Ability Name !! Brief Description !! Java Class Name
 @
-@ PLEASE READ: WHEN CREATING ABILITIES MAKE THE CLASS HAVE AN "A" BEFORE IT BUT PROVIDE THE NAME OF THE CLASS WITHOUT AN A HERE
+@ PLEASE READ: WHEN CREATING ABILITIES MAKE THE CLASS HAVE AN "A" BEFORE IT BUT PROVIDE THE NAME OF THE CLASS WITHOUT AN "A" HERE
 @
-Default !! The player has no abilities. !! Default
-Fortress !! Pieces that have been stationary outside their starting area for 5 turns have an extra life after being jumped. !! Fortress
+Default !! The player has no abilities.
+Fortress !! Pieces that have been stationary outside their starting area for 5 turns have an extra life after being jumped.

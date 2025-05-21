@@ -65,7 +65,10 @@ public class Board {
         for(int i=0;i<board.length;i++){
             for(int j=0;j<board[0].length;j++){
                 if(board[i][j]!=null){
-                    {
+                    if(board[i][j].getPromoted()){
+                        arr[counter] = "x";
+                    }
+                    else{
                         arr[counter] = " ";
                     }
                     arr[counter++] += formatCell(i,j)+" ";
@@ -93,6 +96,7 @@ public class Board {
                 }
             }
             board = temp;
+            tickAll();
         }
     }
 
@@ -168,8 +172,6 @@ public class Board {
         return false;
     }
 
-
-
     public boolean jump(Piece p, int[] end) {
         if(p==null||getLoc(end[0],end[1])!=null){return false;}
 
@@ -187,13 +189,26 @@ public class Board {
         }
         return false;
     }
+
     public boolean move(Piece p, int[] end) {
         if(p==null||getLoc(end[0],end[1])!=null){return false;}
 
         if(validMove(p.getPosition(),end,p.getPromoted(),false)) {
             p.getPlayer().getAbility().move(this,p,end);
+            if(end[0]==0){
+                p.getPlayer().getAbility().promote(this,p);
+            }
             return true;
         }
         return false;
+    }
+
+    private void tickAll(){
+        for(int i=0; i<board.length; i++){
+            for(int j=0; j<board[0].length; j++){
+                if(board[i][j]!=null)
+                    board[i][j].getPlayer().getAbility().tick(this,board[i][j]);
+            }
+        }
     }
 }

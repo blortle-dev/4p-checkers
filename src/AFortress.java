@@ -6,4 +6,5 @@ public class AFortress implements Ability {
     Pieces that have been stationary outside their starting area for 5 turns have an extra life after being jumped.
 
      */
+    //i dont know how to fucking implement this do this later
 }

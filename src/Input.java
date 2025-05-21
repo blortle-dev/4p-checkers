@@ -1,4 +1,3 @@
-import java.io.File;
 import java.util.Scanner;
 
 public class Input {
@@ -29,7 +28,7 @@ public class Input {
                 String nextLn = scanner.nextLine();
                 if (nextLn.equals("list")) {
                     for (String[] line : abilitiesCells) {
-                        System.out.println(line[0] + " - " + line[1] + " - " + line[2]);
+                        System.out.println(line[0] + " - " + line[1]);
                     }
                 }else if(AbilityHandler.getAbility(nextLn)!=null){
                     p.setAbility(AbilityHandler.getAbility(nextLn));
@@ -55,18 +54,22 @@ public class Input {
                 boolean validMove = false;
                 while(!validMove){
                     System.out.println(board.getPlayers()[i].getName()+" ("+board.getPlayers()[i].getIcon()+"\u001B[0m)"+"'s Turn: ");
-                    System.out.print(board.draw()+"\nWhat would you like to move (? to ?): ");
+                    System.out.print(board.draw()+"\nWhat would you like to move (? to ?, \"skip\" for skip): ");
 
                     String[] line = scanner.nextLine().toLowerCase().split(" ");
 
-                    int[] start = new int[]{Integer.parseInt(line[0].substring(1))-1,line[0].charAt(0)-97};
-                    int[] end = new int[]{Integer.parseInt(line[2].substring(1))-1,line[2].charAt(0)-97};
+                    if(!board.getPlayers()[board.getCurrentPlayer()].isSkipped()) {
+                        int[] start = new int[]{Integer.parseInt(line[0].substring(1))-1,line[0].charAt(0)-97};
+                        int[] end = new int[]{Integer.parseInt(line[2].substring(1))-1,line[2].charAt(0)-97};
 
-                    if(board.jump(board.getLoc(start[0],start[1]),end) || board.move(board.getLoc(start[0],start[1]),end)){
+                        if(board.jump(board.getLoc(start[0],start[1]),end) || board.move(board.getLoc(start[0],start[1]),end)){
+                            validMove = true;
+                        }
+                        else{
+                            System.out.println("Invalid Move.");
+                        }
+                    }else{
                         validMove = true;
-                    }
-                    else{
-                        System.out.println("Invalid Move.");
                     }
                 }
 
