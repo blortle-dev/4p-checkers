@@ -21,16 +21,17 @@ public class Input {
         for(Player p: board.getPlayers()){
             counter++;
 
-            System.out.print("Player "+counter+"'s "+"("+p.getIcon()+"\u001B[0m) name (type \"skip\" to skip this player): ");
+            System.out.print("Player "+counter+"'s "+"("+p.getIcon()+"\u001B[0m) name (leave blank to skip this player): ");
             String name = scanner.nextLine();
             p.setName(name);
-            if(!name.equals("skip")){
+            if(!name.isBlank()||counter==1){
                 boolean brk = false;while(!brk) {
                     System.out.print(p.getName() + "'s ability is (type \"list\" for a list, leave blank for default): ");
 
                     String nextLn = scanner.nextLine().toLowerCase();
                     if(nextLn.isBlank()) {
                         p.setAbility(AbilityHandler.getAbility("Default"));
+                        System.out.println();
                         break;
                     }
 
