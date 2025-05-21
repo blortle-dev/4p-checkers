@@ -54,7 +54,7 @@ public class Input {
                 board.setCurrentPlayer(i);
 
                 boolean validMove = false;
-                while(!validMove){
+                while(!validMove&&!board.getPlayers()[board.getCurrentPlayer()].isSkipped()){
                     System.out.println(board.getPlayers()[i].getName()+" ("+board.getPlayers()[i].getIcon()+"\u001B[0m)"+"'s Turn: ");
                     System.out.print(board.draw()+"\nWhat would you like to move (? to ?): ");
 
@@ -66,19 +66,15 @@ public class Input {
                         System.exit(0);
                     }
 
-                    if(!board.getPlayers()[board.getCurrentPlayer()].isSkipped()) {
-                        int[] start = new int[]{Integer.parseInt(line[0].substring(1))-1,line[0].charAt(0)-97};
-                        int[] end = new int[]{Integer.parseInt(line[2].substring(1))-1,line[2].charAt(0)-97};
-
-                        if(board.jump(board.getLoc(start[0],start[1]),end) || board.move(board.getLoc(start[0],start[1]),end)){
-                            validMove = true;
-                        }
-                        else{
-                            System.out.println("Invalid Move.");
-                        }
-                    }else{
+                    int[] start = new int[]{Integer.parseInt(line[0].substring(1))-1,line[0].charAt(0)-97};
+                    int[] end = new int[]{Integer.parseInt(line[2].substring(1))-1,line[2].charAt(0)-97};
+                    if(board.jump(board.getLoc(start[0],start[1]),end) || board.move(board.getLoc(start[0],start[1]),end)){
                         validMove = true;
                     }
+                    else{
+                        System.out.println("Invalid Move.");
+                    }
+
                 }
 
                 System.out.println();
