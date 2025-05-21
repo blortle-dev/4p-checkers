@@ -54,7 +54,7 @@ public class Input {
                 boolean validMove = false;
                 while(!validMove){
                     System.out.println(board.getPlayers()[i].getName()+" ("+board.getPlayers()[i].getIcon()+"\u001B[0m)"+"'s Turn: ");
-                    System.out.print(board.draw()+"\nWhat would you like to move (? to ?, \"skip\" for skip): ");
+                    System.out.print(board.draw()+"\nWhat would you like to move (? to ?): ");
 
                     String[] line = scanner.nextLine().toLowerCase().split(" ");
 

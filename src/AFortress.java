@@ -1,10 +1,9 @@
-public class AFortress implements Ability {
-    /*
-
-    Abilities / Fortress
-
-    Pieces that have been stationary outside their starting area for 5 turns have an extra life after being jumped.
-
-     */
-    //i dont know how to fucking implement this do this later
+public class AFortress implements Ability{
+    @Override
+    public void jump(Board b, Piece p, Piece p2, int[] end) {
+        int[] start = p.getPosition();
+        b.setLoc(end,p);
+        b.setLoc(start,null);
+        p2.setPlayer(new Player("","X","FortressExt"));
+    }
 }
