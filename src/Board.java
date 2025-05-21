@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Board {
     private Piece[][] board;
@@ -123,16 +122,16 @@ public class Board {
     }
 
     public Player winner(){
-        ArrayList<Player> playersDetected = new ArrayList<Player>();
-        for(int i=0;i<board.length;i++){
-            for(int j=0;j<board[0].length;j++){
-                if(board[i][j]!=null&&!playersDetected.contains(board[i][j].getPlayer())){
-                    playersDetected.add(board[i][j].getPlayer());
+        ArrayList<Player> playersDetected = new ArrayList<>();
+        for (Piece[] pieces : board) {
+            for (int j = 0; j < board[0].length; j++) {
+                if (pieces[j] != null && !playersDetected.contains(pieces[j].getPlayer())) {
+                    playersDetected.add(pieces[j].getPlayer());
                 }
             }
         }
         if(playersDetected.size()==1){
-            return playersDetected.get(0);
+            return playersDetected.getFirst();
         }
         return null;
     }
@@ -219,10 +218,10 @@ public class Board {
     }
 
     private void tickAll(){
-        for(int i=0; i<board.length; i++){
-            for(int j=0; j<board[0].length; j++){
-                if(board[i][j]!=null)
-                    board[i][j].getPlayer().getAbility().tick(this,board[i][j]);
+        for (Piece[] pieces : board) {
+            for (int j = 0; j < board[0].length; j++) {
+                if (pieces[j] != null)
+                    pieces[j].getPlayer().getAbility().tick(this, pieces[j]);
             }
         }
     }
