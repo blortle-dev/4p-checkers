@@ -76,6 +76,10 @@ public class Input {
 
                 System.out.println();
                 board.rotateBoard(1);
+                if(board.winner()!=null){
+                    win = true;
+                    break;
+                }
             }
         }
 

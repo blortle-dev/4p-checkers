@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Board {
@@ -121,6 +122,20 @@ public class Board {
         return String.format(out, (Object[]) formatBoard());
     }
 
+    public Player winner(){
+        ArrayList<Player> playersDetected = new ArrayList<Player>();
+        for(int i=0;i<board.length;i++){
+            for(int j=0;j<board[0].length;j++){
+                if(board[i][j]!=null&&!playersDetected.contains(board[i][j].getPlayer())){
+                    playersDetected.add(board[i][j].getPlayer());
+                }
+            }
+        }
+        if(playersDetected.size()==1){
+            return playersDetected.get(0);
+        }
+        return null;
+    }
     //--ACCESSORS & MUTATORS
     public void setLoc(int[] location, Piece piece) {
         board[location[0]][location[1]] = piece;
