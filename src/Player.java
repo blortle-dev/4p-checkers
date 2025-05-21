@@ -1,5 +1,6 @@
 public class Player {
-    private String icon,name;
+    private final String icon;
+    private String name;
     private Ability ability;
     private boolean skip;
     public Player(String name, String icon, String ability) {
