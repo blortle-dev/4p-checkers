@@ -7,7 +7,7 @@ public class Player {
         this.icon = icon;
         this.name = name;
         this.ability = AbilityHandler.getAbility(ability);
-        skip = name.equals("skip");
+        skip = name.isBlank();
     }
     public String getIcon() {return icon;}
     public String getName() {return name;}
@@ -15,7 +15,7 @@ public class Player {
     //public void setIcon(String icon) {this.icon = icon;}
     public void setName(String name) {
         this.name = name;
-        skip = name.equals("skip");
+        skip = name.isBlank();
     }
 
     public void setAbility(Ability ability) {this.ability = ability;}

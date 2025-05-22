@@ -9,3 +9,4 @@ Default !! The player has no abilities.
 Fortress !! Pieces that are jumped by a player with fortress will not be removed from the board, rather be put into a state where they are immovable (but still jumpable.)
 Conquerer !! Pieces that are jumped are conquered by the player, max. 5 before going back to normal logic.
 Traveler !! Your pieces can move twice as far, but jumping sacrifices the piece.
+Buddha !! You now follow the teachings of master Buddha. You must sit in deep thought until the end of the game, where you can 1v1 the last player.

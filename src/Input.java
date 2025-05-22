@@ -31,7 +31,6 @@ public class Input {
                     String nextLn = scanner.nextLine().toLowerCase();
                     if(nextLn.isBlank()) {
                         p.setAbility(AbilityHandler.getAbility("Default"));
-                        System.out.println();
                         break;
                     }
 
@@ -48,8 +47,8 @@ public class Input {
                     }else{
                         System.out.println("Invalid ability, try again.");
                     }
-                    System.out.println();
                 }
+                System.out.println();
             }
         }
 
@@ -60,44 +59,47 @@ public class Input {
         startSeq();
 
         boolean win = false;
-        while(!win){
-            for(int i=0;i<4;i++){
+        while(!win){//main game loop
+            for(int i=0;i<4;i++){//each player loop
                 board.setCurrentPlayer(i);
+                if(!board.getPlayers()[board.getCurrentPlayer()].isSkipped()) {
 
-                boolean validMove = false;
-                System.out.println(board.getPlayers()[i].getName()+" ("+board.getPlayers()[i].getIcon()+"\u001B[0m)"+"'s Turn: ");
-                System.out.println(board.draw());
+                    System.out.println(board.getPlayers()[i].getName() + " (" + board.getPlayers()[i].getIcon() + "\u001B[0m)" + "'s Turn: ");
+                    System.out.println(board.draw());
 
-                while(!validMove&&!board.getPlayers()[board.getCurrentPlayer()].isSkipped()){
-                    String[] line = {};
+                    boolean validMove = false;
+                    while (!validMove) {
+                        String[] line = {};
 
-                    boolean brk = false; while(!brk){
-                        System.out.print("What would you like to move (? to ?): ");
-                        String nextLn = scanner.nextLine();
-                        if(!nextLn.trim().isEmpty()&&!nextLn.isBlank()){
-                            line = nextLn.toLowerCase().split(" ");
-                            brk = true;
-                        }else{
+                        boolean brk = false;
+                        while (!brk) {
+                            System.out.print("What would you like to move (? to ?): ");
+                            String nextLn = scanner.nextLine();
+                            if (!nextLn.trim().isEmpty() && !nextLn.isBlank()) {
+                                line = nextLn.toLowerCase().split(" ");
+                                brk = true;
+                            } else {
+                                System.out.println("Invalid move, try again.");
+                            }
+                        }
+
+                        String exitCode = "exit";
+                        if (line[0].equals(exitCode)) {
+                            System.out.println("Exiting...");
+                            System.exit(0);
+                        }
+
+                        if (tryMove(line)) {
+                            validMove = true;
+                        } else {
                             System.out.println("Invalid move, try again.");
                         }
-                    }
-
-                    String exitCode = "exit";
-                    if (line[0].equals(exitCode)) {
-                        System.out.println("Exiting...");
-                        System.exit(0);
-                    }
-
-                    if(tryMove(line)){
-                        validMove = true;
-                    }else{
-                        System.out.println("Invalid move, try again.");
                     }
                 }
 
                 System.out.println();
                 board.rotateBoard(1);
-                if(board.winner()!=null){
+                if(board.getActivePlayers().length==1){
                     win = true;
                     break;
                 }

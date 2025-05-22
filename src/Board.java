@@ -90,7 +90,7 @@ public class Board {
                 for (int j = 0; j < board[0].length; j++) {
                     Piece p = getLoc(i,j);
                     if(p!=null){
-                        p.setPosition(new int[]{j,n-i-1}); //TODO: refactor
+                        p.setPosition(new int[]{j,n-i-1}); //"if it works don't touch it"
                     }
                     temp[j][n - i - 1] = board[i][j];
                 }
@@ -121,20 +121,6 @@ public class Board {
         return String.format(out, (Object[]) formatBoard());
     }
 
-    public Player winner(){
-        ArrayList<Player> playersDetected = new ArrayList<>();
-        for (Piece[] pieces : board) {
-            for (int j = 0; j < board[0].length; j++) {
-                if (pieces[j] != null && !playersDetected.contains(pieces[j].getPlayer()) && !pieces[j].getPlayer().isSkipped()) {
-                    playersDetected.add(pieces[j].getPlayer());
-                }
-            }
-        }
-        if(playersDetected.size()==1){
-            return playersDetected.getFirst();
-        }
-        return null;
-    }
     //--ACCESSORS & MUTATORS
     public void setLoc(int[] location, Piece piece) {
         board[location[0]][location[1]] = piece;
@@ -147,6 +133,17 @@ public class Board {
 
     public Player[] getPlayers(){
         return players;
+    }
+    public Player[] getActivePlayers(){
+        ArrayList<Player> playersDetected = new ArrayList<>();
+        for (Piece[] pieces : board) {
+            for (int j = 0; j < board[0].length; j++) {
+                if (pieces[j] != null && !playersDetected.contains(pieces[j].getPlayer()) && !pieces[j].getPlayer().isSkipped()) {
+                    playersDetected.add(pieces[j].getPlayer());
+                }
+            }
+        }
+        return playersDetected.toArray(new Player[]{});
     }
 
     public void setCurrentPlayer(int currentPlayer){
