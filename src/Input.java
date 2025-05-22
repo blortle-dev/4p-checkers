@@ -60,7 +60,7 @@ public class Input {
 
         boolean win = false;
         while(!win){//main game loop
-            for(int i=0;i<4;i++){//each player loop
+            for(int i=0;i<4;i++){//each player loop, resets to stay in check with current player
                 board.setCurrentPlayer(i);
                 if(!board.getPlayers()[board.getCurrentPlayer()].isSkipped()) {
 
@@ -68,23 +68,28 @@ public class Input {
                     System.out.println(board.draw());
 
                     boolean validMove = false;
+
+                    if(!hasPieces(board.getPlayers()[board.getCurrentPlayer()])){
+                        validMove = true;
+                        board.getPlayers()[i].setSkipped(true);
+                    }
+
                     while (!validMove) {
                         String[] line = {};
 
-                        boolean brk = false;
-                        while (!brk) {
+                        boolean temp = false;
+                        while (!temp) {
                             System.out.print("What would you like to move (? to ?): ");
                             String nextLn = scanner.nextLine();
                             if (!nextLn.trim().isEmpty() && !nextLn.isBlank()) {
                                 line = nextLn.toLowerCase().split(" ");
-                                brk = true;
+                                temp = true;
                             } else {
                                 System.out.println("Invalid move, try again.");
                             }
                         }
 
-                        String exitCode = "exit";
-                        if (line[0].equals(exitCode)) {
+                        if (line[0].equals("exit")) {
                             System.out.println("Exiting...");
                             System.exit(0);
                         }
@@ -108,15 +113,17 @@ public class Input {
 
         boolean temp = true; while(temp){
             System.out.print("Would you like to play again? ");
-            if(scanner.nextLine().toLowerCase().charAt(0) == 'y'){
+            String nextLn = scanner.nextLine();
+            if(nextLn.toLowerCase().charAt(0) == 'y'){
                 temp = false;
                 init();
-            }else if(scanner.nextLine().toLowerCase().charAt(0) == 'n'){
+            }else if(nextLn.toLowerCase().charAt(0) == 'n'){
                 temp = false;
             }
             System.out.println();
         }
     }
+
     private boolean tryMove(String[] line){
         try {
             int[] start = new int[]{Integer.parseInt(line[0].substring(1)) - 1, line[0].charAt(0) - 97};
@@ -125,6 +132,13 @@ public class Input {
                 return true;
             }
         }catch(Exception _){return false;}
+        return false;
+    }
+
+    private boolean hasPieces(Player plr){
+        for(Player p: board.getActivePlayers()){
+            if(p==plr){return true;}
+        }
         return false;
     }
 

@@ -22,5 +22,5 @@ public class Player {
     public Ability getAbility() {return ability;}
 
     public boolean isSkipped() {return skip;}
-    //public void setSkip(boolean skip) {this.skip = skip;}
+    public void setSkipped(boolean skip) {this.skip = skip;}
 }
