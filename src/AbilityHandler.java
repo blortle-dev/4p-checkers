@@ -24,22 +24,21 @@ public class AbilityHandler {
     }
 
     public static String[][] getAbilities() {
-        Scanner sc = null;
+        Scanner sc;
         try {
             sc = new Scanner(new File("src/abilities.txt"));
         } catch (FileNotFoundException e) {
             System.out.println("Abilities file not found.");
+            return new String[][]{{"Default","The player has no abilities."}};
         }
 
         ArrayList<String[]> out = new ArrayList<>();
 
-        int len = 0;
-        while(sc!=null&&sc.hasNextLine()){
+        while(sc.hasNextLine()){
             String line = sc.nextLine();
             if(line.isEmpty() || line.charAt(0) == '@') continue;
             String[] split = line.split(" !! ");
             out.add(split);
-            len++;
         }
 
         return out.toArray(new String[0][]);
