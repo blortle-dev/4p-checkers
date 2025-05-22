@@ -3,7 +3,7 @@
 @ A template ability is listed below:
 @ Ability Name !! Brief Description !! Java Class Name
 @
-@ PLEASE READ: WHEN CREATING ABILITIES MAKE THE CLASS HAVE AN "A" BEFORE IT BUT PROVIDE THE NAME OF THE CLASS WITHOUT AN "A" HERE
+@ PLEASE READ: WHEN CREATING ABILITIES, MAKE THE CLASS HAVE AN "A" BEFORE IT BUT PROVIDE THE NAME OF THE CLASS WITHOUT AN "A" HERE
 @
 Default !! The player has no abilities.
 Fortress !! Pieces that are jumped by a player with fortress will not be removed from the board, rather be put into a state where they are immovable (but still jumpable.)
