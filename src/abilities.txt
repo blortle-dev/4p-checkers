@@ -1,5 +1,5 @@
 @ This file lists the available abilities in 4p-checkers.
-@ Lines are commented out with an @ at the start.
+@ Lines with an @ at the start are commented out.
 @ A template ability is listed below:
 @ Ability Name !! Brief Description !! Java Class Name
 @
